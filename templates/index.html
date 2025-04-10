@@ -1,10 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Real-Time YOLOv8 Detection</title>
+  <meta charset="UTF-8">
+  <title>YOLOv8 + Storytelling</title>
+  <script>
+    function fetchDescription() {
+      fetch('/description')
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('story').innerText = data.description;
+        });
+    }
+
+    setInterval(fetchDescription, 3000); // Update every 3 seconds
+
+    function shutdownApp() {
+      if (confirm("Are you sure you want to end the app?")) {
+        fetch('/shutdown', { method: 'POST' })
+          .then(response => response.text())
+          .then(message => {
+            alert(message);
+            window.close(); // attempt to close window
+          });
+      }
+    }
+  </script>
 </head>
 <body>
-    <h2>YOLOv8 Real-Time Detection with Webcam</h2>
-    <img src="{{ url_for('video_feed') }}" width="720" height="540" />
+  <h2>Real-Time YOLOv8 Object Detection & Storytelling</h2>
+  <img src="{{ url_for('video_feed') }}" width="720" height="540" />
+  
+  <h3 style="margin-top: 20px;">Scene Description:</h3>
+  <p id="story">Waiting for description...</p>
+
+  <!-- End Button -->
+  <button onclick="shutdownApp()" style="margin-top: 20px; padding: 10px 20px; font-size: 16px;">End</button>
 </body>
 </html>
